@@ -1,0 +1,13 @@
+- name: Uninstalling argbash
+  become: true
+  make: 
+    chdir: "/opt/argbash-{{ argbash_local_version }}/resources/"
+    target: uninstall
+    params:
+      PREFIX: /usr
+
+- name: Removing source folder
+  become: true
+  file:
+    path: "/opt/argbash-{{ argbash_local_version }}/resources/"
+    state: absent

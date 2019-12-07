@@ -1,0 +1,47 @@
+---
+# tasks file for ansible-role-argbash
+
+# https://github.com/matejak/argbash/archive/master.zip
+
+- name: Getting latest argbash version
+  shell: git ls-remote --tags https://github.com/matejak/argbash.git | tail -n1 | sed 's/.*\///; s/\^{}//'
+  register: argbash_git
+  changed_when: false
+
+
+- name: Checking if argbash is installed
+  stat:
+    path: /usr/bin/argbash
+  register: argbash_installed
+
+- name: Getting current argbash version
+  shell: /usr/bin/argbash --version | head -n1 | sed 's/argbash //'
+  when: argbash_installed.stat.exists
+  register: argbash_local
+  changed_when: false
+
+# https://github.com/matejak/argbash/archive/2.8.1.zip
+
+- name: Set forced version
+  set_fact:
+    argbash_git_version: "{{ argbash_install_version }}"
+  when: argbash_force_install | bool
+
+- name: Set latest git version
+  set_fact:
+    argbash_git_version: "{{ argbash_git.stdout }}"
+  when: not argbash_force_install
+
+- set_fact:
+    argbash_local_version: "{{ argbash_local.stdout }}"
+  when: argbash_installed.stat.exists
+
+- include_tasks: uninstall.yml
+  when: 
+    - argbash_installed.stat.exists 
+    - (argbash_git_version != argbash_local_version) or argbash_force_install
+
+- include_tasks: install.yml
+  when: not argbash_installed.stat.exists or 
+        argbash_force_install or 
+        (argbash_git_version != argbash_local_version)

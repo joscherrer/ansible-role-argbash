@@ -1,0 +1,15 @@
+- name: Downloading the latest version of argbash
+  unarchive:
+    src: "https://github.com/matejak/argbash/archive/{{ argbash_git_version }}.zip"
+    dest: /opt/
+    remote_src: yes
+  become: yes
+
+- name: Installing argbash
+  become: true
+  make: 
+    chdir: "/opt/argbash-{{ argbash_git_version }}/resources/"
+    target: install
+    params:
+      PREFIX: /usr
+      INSTALL_COMPLETION: yes
