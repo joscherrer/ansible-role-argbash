@@ -6,6 +6,10 @@
   register: argbash_git
   changed_when: false
 
+- name: Checking if autoconf is installed
+  package:
+    name: autoconf
+    state: present
 
 - name: Checking if argbash is installed
   stat:
