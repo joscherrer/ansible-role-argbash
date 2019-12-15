@@ -1,6 +1,6 @@
 - name: Downloading the latest version of argbash
   unarchive:
-    src: "https://github.com/matejak/argbash/archive/{{ argbash_git_version }}.zip"
+    src: "https://github.com/matejak/argbash/archive/{{ argbash_git_version }}.tar.gz"
     dest: /opt/
     remote_src: yes
   become: yes
