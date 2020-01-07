@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: argbash
   author: Jonathan Scherrer
   description: Installs argbash
   company: Perso
